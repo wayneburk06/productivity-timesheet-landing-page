@@ -10,8 +10,34 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: {
+    default: 'Productivity Timesheet — Plan every 15 minutes',
+    template: '%s · Productivity Timesheet',
+  },
+  description:
+    'A powerful Windows productivity app that helps you compare your planned work with what you actually accomplished. Plan in 15-minute blocks, sync with Outlook, and keep your data private on your PC.',
+  keywords: [
+    'time tracking',
+    'time blocking',
+    'productivity app',
+    'Windows timesheet',
+    'planned vs actual',
+    'Outlook calendar sync',
+    'focus tracking',
+  ],
+  authors: [{ name: 'Productivity Timesheet' }],
+  openGraph: {
+    title: 'Productivity Timesheet — Plan every 15 minutes',
+    description:
+      'Compare your planned work with what you actually accomplished. A privacy-first Windows productivity app.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Productivity Timesheet — Plan every 15 minutes',
+    description:
+      'Compare your planned work with what you actually accomplished. A privacy-first Windows productivity app.',
+  },
   generator: 'v0.app',
   icons: {
     icon: [
@@ -33,11 +59,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({
@@ -46,7 +69,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`light ${geistSans.variable} ${geistMono.variable} bg-background`}
+    >
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
