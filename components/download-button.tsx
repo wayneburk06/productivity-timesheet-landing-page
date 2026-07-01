@@ -1,5 +1,4 @@
-"use client"
-
+import Link from "next/link"
 import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { appConfig } from "@/lib/config"
@@ -20,31 +19,15 @@ export function DownloadButton({
   label = "Download for Windows",
   showIcon = true,
 }: Props) {
-  function handleDownload() {
-    // Fire-and-forget tracking. keepalive lets it complete during navigation.
-    try {
-      void fetch("/api/track/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ version: appConfig.version }),
-        keepalive: true,
-      })
-      // Also push a custom event for GA/Matomo if present later.
-      // @ts-expect-error optional analytics globals
-      window.dataLayer?.push?.({ event: "download_click", app_version: appConfig.version })
-      // @ts-expect-error optional analytics globals
-      window._paq?.push?.(["trackEvent", "Download", "Click", "Windows"])
-    } catch {
-      // ignore — never block the download
-    }
-  }
-
+  // Buttons point at the internal /download route, which performs the tracking
+  // and GA event before redirecting straight to the installer asset. This keeps
+  // the user off the GitHub release page.
   return (
     <Button asChild size={size} variant={variant} className={cn("gap-2", className)}>
-      <a href={appConfig.downloadUrl} download onClick={handleDownload}>
+      <Link href={appConfig.downloadUrl}>
         {showIcon ? <Download className="size-5" aria-hidden="true" /> : null}
         {label}
-      </a>
+      </Link>
     </Button>
   )
 }
