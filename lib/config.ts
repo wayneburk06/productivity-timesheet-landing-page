@@ -11,7 +11,7 @@ export const appConfig = {
   // The real Windows installer asset. `latest/download` always resolves to the
   // newest published release, so this keeps working across future releases.
   installerUrl:
-    "https://github.com/wayneburk06/productivity-timesheet/releases/latest/download/ProductivityTimesheetSetup-v2.0.0.exe",
+    "https://github.com/wayneburk06/productivity-timesheet/releases/latest/download/ProductivityTimesheetSetup-v2.1.0.exe",
   version: "2.0.0",
   fileSize: "24 MB",
   minWindows: "Windows 10 (64-bit) or later",
