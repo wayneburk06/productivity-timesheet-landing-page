@@ -31,7 +31,7 @@ export function SiteHeader() {
           : "border-transparent bg-background/0",
       )}
     >
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+      <div className="flex h-16 w-full items-center justify-between px-6 sm:px-8 lg:px-12">
         <a href="#top" className="flex items-center gap-2.5">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Clock className="size-5" aria-hidden="true" />
