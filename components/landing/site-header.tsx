@@ -54,7 +54,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <DownloadButton size="sm" label="Download" className="shadow-sm" />
+          <DownloadButton label="Download" className="h-10 gap-2 px-4 shadow-sm" />
         </div>
       </div>
     </header>

@@ -10,7 +10,7 @@ export function Hero() {
       {/* subtle background grid */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,oklch(0.92_0.006_256/0.5)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.92_0.006_256/0.5)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,oklch(0.922_0_0/0.6)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.922_0_0/0.6)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]"
       />
       <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
@@ -19,11 +19,16 @@ export function Hero() {
             Privacy-first · Your data stays on your PC
           </span>
 
-          <h1 className="mt-6 text-pretty text-4xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Plan every 15 minutes. Know where your time really goes.
+          <h1 className="mt-7 leading-[1.12] tracking-normal text-foreground">
+            <span className="block text-3xl font-normal tracking-wide sm:text-4xl md:text-5xl">
+              Plan every 15 minutes.
+            </span>
+            <span className="mt-1.5 block text-4xl font-bold tracking-normal sm:mt-2 sm:text-5xl md:text-6xl">
+              Know where your time really goes.
+            </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
             A powerful Windows productivity app that helps you compare your planned work with what
             you actually accomplished. Stay focused, improve your productivity and gain insights
             into your daily work.

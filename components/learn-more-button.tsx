@@ -1,16 +1,23 @@
 "use client"
 
 import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ctaBaseClasses } from "@/components/download-button"
+import { cn } from "@/lib/utils"
 import { trackEvent } from "@/lib/analytics"
 
 export function LearnMoreButton() {
   return (
-    <Button asChild size="lg" variant="outline" className="gap-2">
-      <a href="#features" onClick={() => trackEvent("learn_more_clicked")}>
-        Learn More
-        <ArrowRight className="size-4" aria-hidden="true" />
-      </a>
-    </Button>
+    <a
+      href="#features"
+      onClick={() => trackEvent("learn_more_clicked")}
+      className={cn(
+        ctaBaseClasses,
+        // Secondary: white background, black border + text, subtle hover.
+        "border border-foreground bg-background text-foreground hover:bg-secondary",
+      )}
+    >
+      Learn More
+      <ArrowRight aria-hidden="true" />
+    </a>
   )
 }

@@ -46,7 +46,7 @@ export function Screenshots() {
               className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
             >
               <div
-                className={`relative flex ${shot.aspect} w-full items-center justify-center border-b border-dashed border-border bg-[repeating-linear-gradient(45deg,oklch(0.97_0.004_256),oklch(0.97_0.004_256)_12px,oklch(0.99_0.002_256)_12px,oklch(0.99_0.002_256)_24px)]`}
+                className={`relative flex ${shot.aspect} w-full items-center justify-center border-b border-dashed border-border bg-[repeating-linear-gradient(45deg,oklch(0.97_0_0),oklch(0.97_0_0)_12px,oklch(0.99_0_0)_12px,oklch(0.99_0_0)_24px)]`}
               >
                 <div className="flex flex-col items-center gap-2 text-muted-foreground">
                   <ImageIcon className="size-7" aria-hidden="true" />
