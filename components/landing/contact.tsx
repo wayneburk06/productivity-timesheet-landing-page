@@ -1,7 +1,8 @@
 "use client"
 
 import { Mail, MessageSquareText } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ctaBaseClasses, ctaPrimaryClasses } from "@/components/download-button"
+import { cn } from "@/lib/utils"
 import { appConfig } from "@/lib/config"
 import { trackEvent } from "@/lib/analytics"
 
@@ -21,19 +22,14 @@ export function Contact() {
             workflow? Get in touch — every message is read and genuinely appreciated.
           </p>
           <div className="mt-10 flex justify-center">
-            <Button
-              asChild
-              size="lg"
-              className="h-11 gap-2 rounded-lg px-6 text-sm font-medium whitespace-nowrap transition-colors"
+            <a
+              href={`mailto:${appConfig.contactEmail}`}
+              onClick={() => trackEvent("contact_clicked", { method: "email" })}
+              className={cn(ctaBaseClasses, ctaPrimaryClasses)}
             >
-              <a
-                href={`mailto:${appConfig.contactEmail}`}
-                onClick={() => trackEvent("contact_clicked", { method: "email" })}
-              >
-                <Mail className="size-4" aria-hidden="true" />
-                {appConfig.contactEmail}
-              </a>
-            </Button>
+              <Mail aria-hidden="true" />
+              {appConfig.contactEmail}
+            </a>
           </div>
         </div>
       </div>
