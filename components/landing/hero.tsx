@@ -19,9 +19,9 @@ export function Hero() {
             Privacy-first · Your data stays on your PC
           </span>
 
-          <h1 className="mt-7 text-balance text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            <span className="font-medium">Plan every 15 minutes.</span>{" "}
-            <span className="block font-bold sm:mt-2">Know where your time really goes.</span>
+          <h1 className="mt-7 text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            <span className="block font-normal">Plan every 15 minutes.</span>
+            <span className="mt-1 block font-bold sm:mt-2">Know where your time really goes.</span>
           </h1>
 
           <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
