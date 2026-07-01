@@ -1,30 +1,34 @@
-import { ImageIcon } from "lucide-react"
+import {
+  DailyPlannerScreen,
+  DashboardScreen,
+  FloatingTaskPopupScreen,
+  WeeklyReportScreen,
+} from "./app-screens"
 
 const shots = [
   {
     title: "Daily planner",
-    caption: "Block out your day in 15-minute increments.",
-    aspect: "aspect-[16/10]",
+    caption: "Block out your day in 15-minute increments, planned and actual side by side.",
+    screen: <DailyPlannerScreen />,
   },
   {
-    title: "Planned vs actual",
-    caption: "Compare intention with reality at a glance.",
-    aspect: "aspect-[16/10]",
+    title: "Floating task popup",
+    caption:
+      "Stay focused with an always-on-top popup that reminds you what to work on next and lets you quickly log your actual activity.",
+    screen: <FloatingTaskPopupScreen />,
   },
   {
     title: "Productivity dashboard",
-    caption: "Trends, focus time and category breakdowns.",
-    aspect: "aspect-[16/10]",
+    caption: "Trends, focus time, category breakdowns and on-plan percentage at a glance.",
+    screen: <DashboardScreen />,
   },
   {
     title: "Weekly report",
-    caption: "Automatic summaries every week.",
-    aspect: "aspect-[16/10]",
+    caption: "Automatic weekly summaries with KPIs, top categories and top projects.",
+    screen: <WeeklyReportScreen />,
   },
 ]
 
-// Placeholder frames — drop real PNG/JPG screenshots into /public and
-// replace each placeholder with an <Image /> when they are ready.
 export function Screenshots() {
   return (
     <section id="screenshots" className="border-t border-border bg-secondary/30 py-20 sm:py-28">
@@ -39,23 +43,13 @@ export function Screenshots() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="mt-14 grid grid-cols-1 items-start gap-8 md:grid-cols-2">
           {shots.map((shot) => (
-            <figure
-              key={shot.title}
-              className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
-            >
-              <div
-                className={`relative flex ${shot.aspect} w-full items-center justify-center border-b border-dashed border-border bg-[repeating-linear-gradient(45deg,oklch(0.97_0_0),oklch(0.97_0_0)_12px,oklch(0.99_0_0)_12px,oklch(0.99_0_0)_24px)]`}
-              >
-                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                  <ImageIcon className="size-7" aria-hidden="true" />
-                  <span className="text-xs font-medium">Screenshot placeholder</span>
-                </div>
-              </div>
-              <figcaption className="flex flex-col gap-0.5 px-4 py-3">
+            <figure key={shot.title} className="flex flex-col">
+              <div className="flex flex-1 items-center">{shot.screen}</div>
+              <figcaption className="mt-4 flex flex-col gap-0.5">
                 <span className="text-sm font-semibold text-foreground">{shot.title}</span>
-                <span className="text-sm text-muted-foreground">{shot.caption}</span>
+                <span className="text-sm leading-relaxed text-muted-foreground">{shot.caption}</span>
               </figcaption>
             </figure>
           ))}
