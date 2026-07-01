@@ -23,9 +23,19 @@ export function DownloadButton({
   // and GA event before redirecting straight to the installer asset. This keeps
   // the user off the GitHub release page.
   return (
-    <Button asChild size={size} variant={variant} className={cn("gap-2", className)}>
+    <Button
+      asChild
+      size={size}
+      variant={variant}
+      className={cn(
+        // Consistent premium sizing: fixed height, generous padding,
+        // icon + text always on one line, smooth hover.
+        "h-11 gap-2 rounded-lg px-6 text-sm font-medium whitespace-nowrap transition-colors",
+        className,
+      )}
+    >
       <Link href={appConfig.downloadUrl}>
-        {showIcon ? <Download className="size-5" aria-hidden="true" /> : null}
+        {showIcon ? <Download className="size-4" aria-hidden="true" /> : null}
         {label}
       </Link>
     </Button>

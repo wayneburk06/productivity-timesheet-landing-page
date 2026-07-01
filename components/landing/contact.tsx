@@ -20,13 +20,17 @@ export function Contact() {
             Found a bug, have a feature request, or just want to share how the app helps your
             workflow? Get in touch — every message is read and genuinely appreciated.
           </p>
-          <div className="mt-8 flex justify-center">
-            <Button asChild size="lg" className="gap-2">
+          <div className="mt-10 flex justify-center">
+            <Button
+              asChild
+              size="lg"
+              className="h-11 gap-2 rounded-lg px-6 text-sm font-medium whitespace-nowrap transition-colors"
+            >
               <a
                 href={`mailto:${appConfig.contactEmail}`}
                 onClick={() => trackEvent("contact_clicked", { method: "email" })}
               >
-                <Mail className="size-5" aria-hidden="true" />
+                <Mail className="size-4" aria-hidden="true" />
                 {appConfig.contactEmail}
               </a>
             </Button>
