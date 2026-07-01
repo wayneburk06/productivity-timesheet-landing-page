@@ -4,10 +4,15 @@
 export const appConfig = {
   name: "Productivity Timesheet",
   tagline: "Plan every 15 minutes. Know where your time really goes.",
-  // The latest Windows installer. This is a placeholder — swap it for the
-  // real .exe / .msi download URL (e.g. /downloads/ProductivityTimesheet-Setup.exe).
-  downloadUrl: "/downloads/ProductivityTimesheet-Setup.exe",
-  version: "1.0.0",
+  // Where Download buttons point. This internal route handles tracking + the
+  // GA event, then redirects the user straight to the installer asset so they
+  // never see the GitHub release page.
+  downloadUrl: "/download",
+  // The real Windows installer asset. `latest/download` always resolves to the
+  // newest published release, so this keeps working across future releases.
+  installerUrl:
+    "https://github.com/wayneburk06/productivity-timesheet/releases/latest/download/ProductivityTimesheetSetup-v2.0.0.exe",
+  version: "2.0.0",
   fileSize: "24 MB",
   minWindows: "Windows 10 (64-bit) or later",
   contactEmail: "support@productivitytimesheet.app",
