@@ -20,13 +20,9 @@ export function AppMock() {
           width={2244}
           height={1240}
           priority
-          className="h-auto w-full select-none [filter:grayscale(1)_contrast(1.06)_brightness(0.98)]"
-        />
-
-        {/* subtle vignette to keep focus on the app */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 [box-shadow:inset_0_0_120px_30px_rgba(0,0,0,0.55)]"
+          quality={100}
+          sizes="(max-width: 1024px) 100vw, 960px"
+          className="h-auto w-full select-none [filter:grayscale(1)_contrast(1.04)]"
         />
 
         {/* faint top glass highlight */}
