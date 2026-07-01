@@ -1,6 +1,9 @@
+"use client"
+
 import { Mail, MessageSquareText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { appConfig } from "@/lib/config"
+import { trackEvent } from "@/lib/analytics"
 
 export function Contact() {
   return (
@@ -19,7 +22,10 @@ export function Contact() {
           </p>
           <div className="mt-8 flex justify-center">
             <Button asChild size="lg" className="gap-2">
-              <a href={`mailto:${appConfig.contactEmail}`}>
+              <a
+                href={`mailto:${appConfig.contactEmail}`}
+                onClick={() => trackEvent("contact_clicked", { method: "email" })}
+              >
                 <Mail className="size-5" aria-hidden="true" />
                 {appConfig.contactEmail}
               </a>

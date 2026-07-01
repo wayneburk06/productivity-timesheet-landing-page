@@ -1,6 +1,6 @@
-import { ArrowRight, ShieldCheck } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ShieldCheck } from "lucide-react"
 import { DownloadButton } from "@/components/download-button"
+import { LearnMoreButton } from "@/components/learn-more-button"
 import { appConfig } from "@/lib/config"
 import { AppMock } from "./app-mock"
 
@@ -31,12 +31,7 @@ export function Hero() {
 
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
             <DownloadButton className="shadow-sm" />
-            <Button asChild size="lg" variant="outline" className="gap-2">
-              <a href="#features">
-                Learn More
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </a>
-            </Button>
+            <LearnMoreButton />
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
             Free to use · {appConfig.fileSize} · {appConfig.minWindows}

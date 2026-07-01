@@ -3,6 +3,7 @@
 import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { appConfig } from "@/lib/config"
+import { trackEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 
 type Props = {
@@ -29,6 +30,8 @@ export function DownloadButton({
         body: JSON.stringify({ version: appConfig.version }),
         keepalive: true,
       })
+      // GA4 custom event.
+      trackEvent("download_button_clicked", { app_version: appConfig.version })
       // Also push a custom event for GA/Matomo if present later.
       // @ts-expect-error optional analytics globals
       window.dataLayer?.push?.({ event: "download_click", app_version: appConfig.version })

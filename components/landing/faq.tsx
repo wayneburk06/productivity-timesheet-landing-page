@@ -1,3 +1,6 @@
+"use client"
+
+import { useRef } from "react"
 import {
   Accordion,
   AccordionContent,
@@ -5,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { appConfig } from "@/lib/config"
+import { trackEvent } from "@/lib/analytics"
 
 const faqs = [
   {
@@ -30,6 +34,9 @@ const faqs = [
 ]
 
 export function Faq() {
+  // Track which items are already open so we only fire on newly-opened items.
+  const openValues = useRef<Set<string>>(new Set())
+
   return (
     <section id="faq" className="border-t border-border bg-secondary/30 py-20 sm:py-28">
       <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
@@ -40,7 +47,27 @@ export function Faq() {
           </h2>
         </div>
 
-        <Accordion type="single" collapsible className="mt-10 w-full">
+        <Accordion
+          type="single"
+          collapsible
+          className="mt-10 w-full"
+          onValueChange={(value) => {
+            const current = new Set(
+              (Array.isArray(value) ? value : [value]).map(String),
+            )
+            // Fire only for items that were not open before.
+            for (const item of current) {
+              if (!openValues.current.has(item)) {
+                const index = Number(item.replace("item-", ""))
+                trackEvent("faq_opened", {
+                  faq_index: index,
+                  faq_question: faqs[index]?.q ?? item,
+                })
+              }
+            }
+            openValues.current = current
+          }}
+        >
           {faqs.map((faq, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
               <AccordionTrigger className="text-left text-base font-medium text-foreground">
