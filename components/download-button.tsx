@@ -16,7 +16,7 @@ type Props = {
 // always perfectly centered on a single line (base-ui's Button `asChild` does
 // not forward styles to the child, which caused the icon to stack on the text).
 export const ctaBaseClasses =
-  "inline-flex h-12 items-center justify-center gap-2.5 rounded-lg px-7 text-sm font-medium leading-none whitespace-nowrap transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&_svg]:size-4 [&_svg]:shrink-0"
+  "inline-flex h-[3.25rem] items-center justify-center gap-2.5 rounded-lg px-8 text-base font-medium leading-none whitespace-nowrap transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&_svg]:size-5 [&_svg]:shrink-0"
 
 export const ctaPrimaryClasses =
   "bg-primary text-primary-foreground hover:bg-primary/90"
