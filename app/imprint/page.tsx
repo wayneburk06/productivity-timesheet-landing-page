@@ -9,11 +9,8 @@ export const metadata: Metadata = {
 
 export default function ImprintPage() {
   return (
-    <LegalPage title="Legal Notice (Imprint)">
-      <p>
-        Information according to applicable law. This is a placeholder — replace the details below
-        with your real information before publishing.
-      </p>
+    <LegalPage title="Legal Notice">
+      <p>Information according to Section 5 DDG (Germany)</p>
 
       <LegalSection heading="Responsible for content">
         <p className="flex flex-col">

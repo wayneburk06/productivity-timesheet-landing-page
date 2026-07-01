@@ -16,11 +16,11 @@ export const appConfig = {
   fileSize: "24 MB",
   minWindows: "Windows 10 (64-bit) or later",
   contactEmail: "support@productivitytimesheet.app",
-  // Used in the Imprint / Legal Notice. Replace with real details.
+  // Used in the Imprint / Legal Notice.
   company: {
     name: "Productivity Timesheet",
-    owner: "Your Name",
-    addressLines: ["Your Street 1", "12345 Your City", "Germany"],
+    owner: "Wayne Burk",
+    addressLines: ["Rehbergkuppe 8", "35745 Herborn", "Germany"],
     email: "support@productivitytimesheet.app",
   },
 } as const
