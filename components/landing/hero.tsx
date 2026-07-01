@@ -20,7 +20,7 @@ export function Hero() {
           </span>
 
           <h1 className="mt-7 leading-[1.12] tracking-normal text-foreground">
-            <span className="block text-2xl font-normal tracking-wide sm:text-3xl md:text-4xl">
+            <span className="block text-3xl font-normal tracking-wide sm:text-4xl md:text-5xl">
               Plan every 15 minutes.
             </span>
             <span className="mt-1.5 block text-4xl font-bold tracking-normal sm:mt-2 sm:text-5xl md:text-6xl">
