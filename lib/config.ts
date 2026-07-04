@@ -18,7 +18,7 @@ export const appConfig = {
   contactEmail: "support@productivitytimesheet.app",
   // Used in the Imprint / Legal Notice.
   company: {
-    name: "Productivity Timesheet",
+    name: "Elvatica",
     owner: "Wayne Burk",
     addressLines: ["Rehbergkuppe 8", "35745 Herborn", "Germany"],
     email: "support@productivitytimesheet.app",
