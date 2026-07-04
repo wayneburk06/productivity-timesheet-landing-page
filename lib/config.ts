@@ -20,7 +20,8 @@ export const appConfig = {
   company: {
     name: "Elvatica",
     owner: "Wayne Burk",
-    addressLines: ["Rehbergkuppe 8", "35745 Herborn", "Germany"],
+    addressLines: ["[PLACEHOLDER_ADDRESS]", "Germany"],
+    website: "https://productivitytimesheet.app",
     email: "support@productivitytimesheet.app",
   },
 } as const

@@ -12,7 +12,7 @@ export default function ImprintPage() {
     <LegalPage title="Legal Notice">
       <p>Information according to Section 5 DDG (Germany)</p>
 
-      <LegalSection heading="Responsible for content">
+      <LegalSection heading="Provider">
         <p className="flex flex-col">
           <span>{appConfig.company.owner}</span>
           {appConfig.company.addressLines.map((line) => (
@@ -28,6 +28,21 @@ export default function ImprintPage() {
             {appConfig.company.email}
           </a>
         </p>
+        <p>
+          Website:{" "}
+          <a
+            className="text-primary underline-offset-4 hover:underline"
+            href={appConfig.company.website}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {appConfig.company.website}
+          </a>
+        </p>
+      </LegalSection>
+
+      <LegalSection heading="Responsible for the content according to applicable law">
+        <p>{appConfig.company.owner}</p>
       </LegalSection>
 
       <LegalSection heading="Disclaimer">
