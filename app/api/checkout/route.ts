@@ -8,7 +8,7 @@ const TRIAL_PERIOD_DAYS = 7
 
 // Absolute URLs for the production domain, per requirements.
 const SUCCESS_URL = "https://productivitytimesheet.app/success"
-const CANCEL_URL = "https://productivitytimesheet.app/pricing"
+const CANCEL_URL = "https://productivitytimesheet.app"
 
 // Secure, server-side Checkout Session creation.
 // The Stripe secret key never leaves the server.
