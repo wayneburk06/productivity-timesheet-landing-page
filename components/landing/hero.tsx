@@ -1,5 +1,5 @@
 import { ShieldCheck } from "lucide-react"
-import { DownloadButton } from "@/components/download-button"
+import { StartTrialButton } from "@/components/start-trial-button"
 import { LearnMoreButton } from "@/components/learn-more-button"
 import { appConfig } from "@/lib/config"
 import { AppMock } from "./app-mock"
@@ -24,22 +24,22 @@ export function Hero() {
               Plan every 15 minutes.
             </span>
             <span className="mt-1.5 block text-4xl font-bold tracking-normal sm:mt-2 sm:text-5xl md:text-6xl">
-              Know where your time really goes.
+              Improve every day.
             </span>
           </h1>
 
           <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
-            A powerful Windows productivity app that helps you compare your planned work with what
-            you actually accomplished. Stay focused, improve your productivity and gain insights
-            into your daily work.
+            Start your free 7-day trial and download the Windows app after creating your account.
+            Compare your planned work with what you actually accomplished, stay focused and gain
+            insights into your daily work.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-            <DownloadButton className="shadow-sm" />
-            <LearnMoreButton />
+            <StartTrialButton className="shadow-sm" />
+            <LearnMoreButton label="View Features" />
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Free to use · {appConfig.fileSize} · {appConfig.minWindows}
+            7-day free trial · No commitment · {appConfig.minWindows}
           </p>
         </div>
 

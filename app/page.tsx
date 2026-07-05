@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/landing/site-header"
 import { Hero } from "@/components/landing/hero"
 import { Features } from "@/components/landing/features"
 import { Screenshots } from "@/components/landing/screenshots"
+import { Onboarding } from "@/components/landing/onboarding"
 import { DownloadCta } from "@/components/landing/download-cta"
 import { Faq } from "@/components/landing/faq"
 import { Contact } from "@/components/landing/contact"
@@ -17,6 +18,7 @@ export default function HomePage() {
         <Hero />
         <Features />
         <Screenshots />
+        <Onboarding />
         <DownloadCta />
         <Faq />
         <Contact />

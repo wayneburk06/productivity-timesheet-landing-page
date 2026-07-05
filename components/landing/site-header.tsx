@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Clock } from "lucide-react"
-import { DownloadButton } from "@/components/download-button"
+import { StartTrialButton } from "@/components/start-trial-button"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -54,7 +54,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <DownloadButton label="Download" className="h-10 gap-2 px-4 shadow-sm" />
+          <StartTrialButton label="Start Free Trial" showIcon={false} className="h-10 gap-2 px-4 shadow-sm" />
         </div>
       </div>
     </header>
