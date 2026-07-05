@@ -1,46 +1,24 @@
 import Link from "next/link"
-import { CheckCircle2, Download, LogIn } from "lucide-react"
+import { CheckCircle2, Download } from "lucide-react"
 import { PageViewTracker } from "@/components/page-view-tracker"
-import { DownloadButton } from "@/components/download-button"
-import { stripe } from "@/lib/stripe"
+import { ctaBaseClasses, ctaPrimaryClasses } from "@/components/download-button"
+import { cn } from "@/lib/utils"
 import { appConfig } from "@/lib/config"
 
 export const metadata = {
-  title: `Your trial is ready · ${appConfig.name}`,
-  description: "Download Productivity Timesheet for Windows and sign in to start tracking.",
+  title: `You're all set · ${appConfig.name}`,
+  description: "Your free trial has started. Download the Windows app and sign in to start tracking.",
 }
 
-async function getSession(sessionId: string | undefined) {
-  if (!sessionId) return null
-  try {
-    return await stripe.checkout.sessions.retrieve(sessionId)
-  } catch {
-    return null
-  }
-}
+const checklist = [
+  "Free trial activated",
+  "Account created",
+  "Download the app",
+  "Sign in",
+  "Start tracking your productivity",
+]
 
-export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ session_id?: string }>
-}) {
-  const { session_id } = await searchParams
-  const session = await getSession(session_id)
-  const isConfirmed = session?.status === "complete"
-
-  const steps = [
-    {
-      icon: Download,
-      title: "Download the Windows app",
-      body: `Get the ${appConfig.name} installer for Windows and run the setup file.`,
-    },
-    {
-      icon: LogIn,
-      title: "Sign in inside the app",
-      body: "Open the app and sign in with the email you used at checkout to activate your trial.",
-    },
-  ]
-
+export default function SuccessPage() {
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background px-4 py-16">
       <PageViewTracker path="/success" />
@@ -50,45 +28,46 @@ export default async function SuccessPage({
         </span>
 
         <h1 className="mt-7 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Your 7-day free trial is active
+          You&apos;re all set!
         </h1>
-        <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
-          {isConfirmed
-            ? "Thanks for starting your trial. Finish setup in two quick steps."
-            : "Your trial is being set up. Finish setup in two quick steps below."}
+        <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
+          Your free trial has started successfully.
         </p>
 
         <div className="mt-10 w-full rounded-2xl border border-border bg-card p-6 text-left shadow-sm sm:p-8">
-          <ol className="flex flex-col gap-6">
-            {steps.map((step, i) => (
-              <li key={step.title} className="flex gap-4">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-foreground text-sm font-semibold text-background">
-                  {i + 1}
-                </span>
-                <div className="flex flex-col gap-1">
-                  <p className="flex items-center gap-2 text-base font-medium text-foreground">
-                    <step.icon className="size-4 text-primary" aria-hidden="true" />
-                    {step.title}
-                  </p>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <p className="text-pretty text-base leading-relaxed text-muted-foreground">
+            Your account has been created and your free trial is now active.
+          </p>
+          <p className="mt-4 text-pretty text-base leading-relaxed text-foreground">
+            Next step: download the Windows application and sign in using the email address you used
+            during checkout.
+          </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
-            <DownloadButton className="w-full shadow-sm sm:w-auto" />
+            <a href="#" className={cn(ctaBaseClasses, ctaPrimaryClasses, "w-full sm:w-auto")}>
+              <Download aria-hidden="true" />
+              Download for Windows
+            </a>
             <p className="text-xs text-muted-foreground">
               {appConfig.fileSize} · {appConfig.minWindows}
             </p>
           </div>
+
+          <ul className="mt-8 flex flex-col gap-3 border-t border-border pt-6">
+            {checklist.map((item) => (
+              <li key={item} className="flex items-center gap-3 text-sm text-foreground">
+                <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <Link
           href="/"
           className="mt-8 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
         >
-          Back to home
+          Back to Home
         </Link>
       </div>
     </main>
