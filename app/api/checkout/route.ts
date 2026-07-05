@@ -14,9 +14,9 @@ const CANCEL_URL = "https://productivitytimesheet.app"
 // --- Startup diagnostics (safe to log) --------------------------------------
 // Logs which Stripe account the backend is actually authenticating as, so we can
 // verify the checkout key belongs to the same account that owns PRICE_ID.
-// The client uses STRIPE_ACCESS_TOKEN_2 (live key for acct_1TpQ7xLjAVqODdeg).
+// The client uses STRIPE_SECRET_KEY (see lib/stripe.ts).
 // Runs once when this module is first loaded.
-const secretKey = process.env.STRIPE_ACCESS_TOKEN_2 ?? ""
+const secretKey = process.env.STRIPE_SECRET_KEY ?? ""
 const keyMode = secretKey.startsWith("sk_live_")
   ? "LIVE"
   : secretKey.startsWith("sk_test_")

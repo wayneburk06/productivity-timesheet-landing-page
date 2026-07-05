@@ -11,11 +11,8 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js"
  * All secrets are read exclusively from environment variables.
  */
 
-// Support both the public and server-side naming conventions for the URL.
-const supabaseUrl =
-  process.env.SUPABASE_URL ??
-  process.env.NEXT_PUBLIC_SUPABASE_URL ??
-  ""
+// Server-side only. No NEXT_PUBLIC_ variables are used for secrets.
+const supabaseUrl = process.env.SUPABASE_URL ?? ""
 
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? ""
 
@@ -28,7 +25,7 @@ let cachedClient: SupabaseClient | null = null
  */
 export function getSupabaseAdmin(): SupabaseClient {
   if (!supabaseUrl) {
-    throw new Error("Missing SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) environment variable")
+    throw new Error("Missing SUPABASE_URL environment variable")
   }
   if (!serviceRoleKey) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable")
