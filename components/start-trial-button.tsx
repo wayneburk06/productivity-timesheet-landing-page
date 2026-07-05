@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react"
 import { ArrowRight, Loader2 } from "lucide-react"
 import { ctaBaseClasses, ctaPrimaryClasses } from "@/components/download-button"
-import { startTrialCheckout } from "@/app/actions/stripe"
 import { cn } from "@/lib/utils"
 import { trackEvent } from "@/lib/analytics"
 
@@ -28,7 +27,14 @@ export function StartTrialButton({
     trackEvent("start_trial_clicked")
     startTransition(async () => {
       try {
-        const url = await startTrialCheckout()
+        const res = await fetch("/api/checkout", { method: "POST" })
+        if (!res.ok) {
+          throw new Error("Checkout request failed")
+        }
+        const { url } = (await res.json()) as { url?: string }
+        if (!url) {
+          throw new Error("Missing checkout URL")
+        }
         window.location.href = url
       } catch {
         setError("Something went wrong. Please try again.")
