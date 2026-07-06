@@ -61,52 +61,86 @@ function getCurrentPeriodEnd(subscription: Stripe.Subscription): string | null {
 }
 
 /**
- * Finds an existing Supabase auth user by email, or creates one if missing.
+ * Resolves the Supabase auth user for an email, creating one if needed, and
+ * optionally sends the account-activation / login email.
+ *
+ * Email behavior (only when `sendActivationEmail` is true — i.e. on a fresh
+ * purchase via checkout.session.completed):
+ *   - Brand new user  -> inviteUserByEmail (creates user + sends invite email)
+ *   - Existing user   -> resetPasswordForEmail (sends a password/login email so
+ *                        returning customers regain access after repurchasing)
+ * When `sendActivationEmail` is false (recurring subscription/invoice events),
+ * no email is ever sent; a missing user is created silently so the
+ * subscription row can still link to a user id. Never creates duplicate users.
+ *
  * Returns the user id, or null if the user could not be resolved/created.
  */
-export async function findOrCreateAuthUser(email: string): Promise<string | null> {
+export async function findOrCreateAuthUser(
+  email: string,
+  opts: { sendActivationEmail?: boolean } = {},
+): Promise<string | null> {
   const normalizedEmail = email.trim().toLowerCase()
   if (!normalizedEmail) {
     console.error("[v0] webhook: cannot resolve auth user, empty email")
     return null
   }
 
+  const sendActivationEmail = opts.sendActivationEmail ?? false
   const supabase = getSupabaseAdmin()
 
-  // 1) Try to find an existing user by paging through the auth users list.
-  const existing = await findAuthUserByEmail(normalizedEmail)
-  if (existing) {
-    console.log("[v0] webhook: found existing auth user for", normalizedEmail)
-    return existing
-  }
-
-  // 2) Not found -> invite the user by email. This creates the auth user AND
-  //    sends a Supabase "You have been invited" email containing a link to set
-  //    their password / activate the account. Only brand new users reach this
-  //    branch, so existing customers are never re-invited.
-  //
-  //    The redirect target after the user clicks the email link. Points at the
-  //    official Supabase auth callback, which verifies the token and forwards
-  //    the user to the set-password page. Never points at localhost. Override
-  //    the base URL with SUPABASE_INVITE_REDIRECT_URL if the domain changes.
+  // The redirect target after the user clicks the email link. Points at the
+  // official Supabase auth callback, which verifies the token and forwards the
+  // user to the set-password page. Never points at localhost. Override the base
+  // URL with SUPABASE_INVITE_REDIRECT_URL if the domain changes.
   const baseUrl = process.env.SUPABASE_INVITE_REDIRECT_URL || "https://www.productivitytimesheet.app"
   const redirectTo = `${baseUrl.replace(/\/$/, "")}/auth/callback?next=/set-password`
 
-  const { data, error } = await supabase.auth.admin.inviteUserByEmail(normalizedEmail, { redirectTo })
-
-  if (error) {
-    // Race condition: another event may have created the user first.
-    const alreadyExists = await findAuthUserByEmail(normalizedEmail)
-    if (alreadyExists) {
-      console.log("[v0] webhook: user already existed (race); no invite sent to", normalizedEmail)
-      return alreadyExists
+  // 1) Existing user -> optionally send a password/login email, never duplicate.
+  const existing = await findAuthUserByEmail(normalizedEmail)
+  if (existing) {
+    if (sendActivationEmail) {
+      const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, { redirectTo })
+      if (error) {
+        console.error("[v0] webhook: failed to send password email to existing user", normalizedEmail, "-", error.message)
+      } else {
+        console.log("[v0] webhook: password/login email sent to existing user", normalizedEmail)
+      }
+    } else {
+      console.log("[v0] webhook: found existing auth user for", normalizedEmail)
     }
-
-    console.error("[v0] webhook: failed to invite auth user for", normalizedEmail, "-", error.message)
-    return null
+    return existing
   }
 
-  console.log("[v0] webhook: invite email sent to new user", normalizedEmail)
+  // 2) New user + activation email -> invite (creates the user AND emails them).
+  if (sendActivationEmail) {
+    const { data, error } = await supabase.auth.admin.inviteUserByEmail(normalizedEmail, { redirectTo })
+    if (error) {
+      // Race condition: another event may have created the user first.
+      const alreadyExists = await findAuthUserByEmail(normalizedEmail)
+      if (alreadyExists) {
+        console.log("[v0] webhook: user already existed (race); no invite sent to", normalizedEmail)
+        return alreadyExists
+      }
+      console.error("[v0] webhook: failed to invite auth user for", normalizedEmail, "-", error.message)
+      return null
+    }
+    console.log("[v0] webhook: invite email sent to new user", normalizedEmail)
+    return data.user?.id ?? null
+  }
+
+  // 3) New user, no activation email (recurring event) -> create silently so the
+  //    subscription still links to a user. The next checkout email will reach them.
+  const { data, error } = await supabase.auth.admin.createUser({
+    email: normalizedEmail,
+    email_confirm: true,
+  })
+  if (error) {
+    const alreadyExists = await findAuthUserByEmail(normalizedEmail)
+    if (alreadyExists) return alreadyExists
+    console.error("[v0] webhook: failed to create auth user for", normalizedEmail, "-", error.message)
+    return null
+  }
+  console.log("[v0] webhook: created auth user (no email) for", normalizedEmail)
   return data.user?.id ?? null
 }
 

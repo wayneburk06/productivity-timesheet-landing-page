@@ -20,17 +20,49 @@ export function SetPasswordForm({ initialError }: { initialError?: string }) {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(initialError ?? null)
 
-  // Confirm the invite link produced a valid session before showing the form.
+  // Establish the activation session before showing the form. Supabase can
+  // deliver the session in two ways depending on the email template:
+  //   - Server flow: token_hash/type or code -> handled by /auth/callback,
+  //     which sets cookies. Here we simply read the resulting user.
+  //   - Implicit flow: tokens arrive in the URL fragment
+  //     (#access_token=...&refresh_token=...). Fragments never reach the
+  //     server, so we must set the session on the client.
   useEffect(() => {
     let active = true
-    supabase.auth.getUser().then(({ data }) => {
+
+    async function establishSession() {
+      if (typeof window !== "undefined" && window.location.hash) {
+        const params = new URLSearchParams(window.location.hash.replace(/^#/, ""))
+        const accessToken = params.get("access_token")
+        const refreshToken = params.get("refresh_token")
+        const fragmentError = params.get("error_description") || params.get("error")
+
+        if (accessToken && refreshToken) {
+          const { error: sessionError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          })
+          // Strip the tokens from the URL immediately (never leave them around).
+          window.history.replaceState(null, "", window.location.pathname)
+          if (sessionError && active) setError(sessionError.message)
+        } else if (fragmentError) {
+          window.history.replaceState(null, "", window.location.pathname)
+          if (active) setError(fragmentError)
+        }
+      }
+
+      const { data } = await supabase.auth.getUser()
       if (!active) return
       if (data.user) {
         setHasSession(true)
         setEmail(data.user.email ?? null)
+        // A valid session supersedes any stale error from the query string.
+        setError(null)
       }
       setCheckingSession(false)
-    })
+    }
+
+    void establishSession()
     return () => {
       active = false
     }
