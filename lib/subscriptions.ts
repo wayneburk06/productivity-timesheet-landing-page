@@ -84,12 +84,13 @@ export async function findOrCreateAuthUser(email: string): Promise<string | null
   //    sends a Supabase "You have been invited" email containing a link to set
   //    their password / activate the account. Only brand new users reach this
   //    branch, so existing customers are never re-invited.
-  const redirectTo = process.env.SUPABASE_INVITE_REDIRECT_URL || undefined
+  //
+  //    The redirect target after the user clicks the email link. Defaults to the
+  //    production domain so the link never points at localhost. Override with
+  //    SUPABASE_INVITE_REDIRECT_URL (e.g. a dedicated set-password page).
+  const redirectTo = process.env.SUPABASE_INVITE_REDIRECT_URL || "https://www.productivitytimesheet.app"
 
-  const { data, error } = await supabase.auth.admin.inviteUserByEmail(
-    normalizedEmail,
-    redirectTo ? { redirectTo } : undefined,
-  )
+  const { data, error } = await supabase.auth.admin.inviteUserByEmail(normalizedEmail, { redirectTo })
 
   if (error) {
     // Race condition: another event may have created the user first.
