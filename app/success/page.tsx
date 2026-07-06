@@ -44,10 +44,13 @@ export default function SuccessPage() {
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
-            <a href="#" className={cn(ctaBaseClasses, ctaPrimaryClasses, "w-full sm:w-auto")}>
+            <Link
+              href={appConfig.downloadUrl}
+              className={cn(ctaBaseClasses, ctaPrimaryClasses, "w-full sm:w-auto")}
+            >
               <Download aria-hidden="true" />
               Download for Windows
-            </a>
+            </Link>
             <p className="text-xs text-muted-foreground">
               {appConfig.fileSize} · {appConfig.minWindows}
             </p>
