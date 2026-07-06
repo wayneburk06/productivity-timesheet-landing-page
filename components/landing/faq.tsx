@@ -12,12 +12,16 @@ import { trackEvent } from "@/lib/analytics"
 
 const faqs = [
   {
-    q: "Is the app free?",
-    a: "Yes. Productivity Timesheet is free to download and use. There are no accounts to create and no subscription required.",
+    q: "How does the free trial work?",
+    a: "You start with a free 7-day trial. Create your account, download the Windows app and sign in to start tracking. You won't be charged until the trial ends, and you can cancel anytime before then.",
+  },
+  {
+    q: "Do I need an account?",
+    a: "Yes. You create an account when you start your free trial, then sign in inside the Windows app to activate it. This keeps your subscription and trial linked to you.",
   },
   {
     q: "Does it work offline?",
-    a: "Absolutely. The app runs entirely on your computer and does not require an internet connection. Outlook sync is the only feature that uses a connection.",
+    a: "Absolutely. Once you've signed in, the app runs entirely on your computer and does not require a constant internet connection. Outlook sync is the only feature that uses a connection.",
   },
   {
     q: "Is Microsoft Outlook required?",

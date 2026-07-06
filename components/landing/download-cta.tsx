@@ -1,32 +1,32 @@
-import { Check, MonitorDown } from "lucide-react"
-import { DownloadButton } from "@/components/download-button"
+import { Check, Sparkles } from "lucide-react"
+import { StartTrialButton } from "@/components/start-trial-button"
 import { appConfig } from "@/lib/config"
 
 const points = [
-  "Free to use",
-  "No account required",
+  "7-day free trial",
+  "Cancel anytime",
   "Works fully offline",
   "Data stays on your PC",
 ]
 
 export function DownloadCta() {
   return (
-    <section id="download" className="border-t border-border bg-background py-20 sm:py-28">
+    <section id="trial" className="border-t border-border bg-background py-20 sm:py-28">
       <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">
         <div className="overflow-hidden rounded-2xl border border-border bg-muted px-6 py-14 text-center shadow-sm sm:px-12 sm:py-20">
           <span className="mx-auto flex size-14 items-center justify-center rounded-xl bg-foreground text-background">
-            <MonitorDown className="size-7" aria-hidden="true" />
+            <Sparkles className="size-7" aria-hidden="true" />
           </span>
           <h2 className="mt-7 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Download Productivity Timesheet for Windows
+            Start your free trial of Productivity Timesheet
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
-            Get the latest version and start tracking your time in minutes. Version{" "}
-            {appConfig.version} · {appConfig.fileSize}
+            Create your account, then download the Windows app and start tracking your time in
+            minutes. Version {appConfig.version} · {appConfig.fileSize}
           </p>
 
           <div className="mt-9 flex justify-center">
-            <DownloadButton className="shadow-sm" />
+            <StartTrialButton className="shadow-sm" />
           </div>
 
           <ul className="mx-auto mt-9 flex max-w-lg flex-wrap items-center justify-center gap-x-6 gap-y-2">

@@ -5,7 +5,7 @@ import { ctaBaseClasses } from "@/components/download-button"
 import { cn } from "@/lib/utils"
 import { trackEvent } from "@/lib/analytics"
 
-export function LearnMoreButton() {
+export function LearnMoreButton({ label = "Learn More" }: { label?: string }) {
   return (
     <a
       href="#features"
@@ -16,7 +16,7 @@ export function LearnMoreButton() {
         "border border-foreground bg-background text-foreground hover:bg-secondary",
       )}
     >
-      Learn More
+      {label}
       <ArrowRight aria-hidden="true" />
     </a>
   )
