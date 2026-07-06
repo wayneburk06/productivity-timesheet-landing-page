@@ -80,23 +80,30 @@ export async function findOrCreateAuthUser(email: string): Promise<string | null
     return existing
   }
 
-  // 2) Not found -> create a confirmed auth user (no password; user can set one
-  //    later via password reset / magic link inside the app).
-  const { data, error } = await supabase.auth.admin.createUser({
-    email: normalizedEmail,
-    email_confirm: true,
-  })
+  // 2) Not found -> invite the user by email. This creates the auth user AND
+  //    sends a Supabase "You have been invited" email containing a link to set
+  //    their password / activate the account. Only brand new users reach this
+  //    branch, so existing customers are never re-invited.
+  const redirectTo = process.env.SUPABASE_INVITE_REDIRECT_URL || undefined
+
+  const { data, error } = await supabase.auth.admin.inviteUserByEmail(
+    normalizedEmail,
+    redirectTo ? { redirectTo } : undefined,
+  )
 
   if (error) {
     // Race condition: another event may have created the user first.
     const alreadyExists = await findAuthUserByEmail(normalizedEmail)
-    if (alreadyExists) return alreadyExists
+    if (alreadyExists) {
+      console.log("[v0] webhook: user already existed (race); no invite sent to", normalizedEmail)
+      return alreadyExists
+    }
 
-    console.error("[v0] webhook: failed to create auth user for", normalizedEmail, "-", error.message)
+    console.error("[v0] webhook: failed to invite auth user for", normalizedEmail, "-", error.message)
     return null
   }
 
-  console.log("[v0] webhook: created new auth user for", normalizedEmail)
+  console.log("[v0] webhook: invite email sent to new user", normalizedEmail)
   return data.user?.id ?? null
 }
 
