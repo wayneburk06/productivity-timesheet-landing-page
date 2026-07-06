@@ -55,7 +55,7 @@ async function retrieveSubscription(subscriptionId: string | null | undefined): 
  */
 async function syncSubscription(
   subscription: Stripe.Subscription,
-  opts: { emailOverride?: string | null; statusOverride?: string } = {},
+  opts: { emailOverride?: string | null; statusOverride?: string; sendActivationEmail?: boolean } = {},
 ): Promise<void> {
   const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer?.id ?? null
 
@@ -64,7 +64,9 @@ async function syncSubscription(
     console.error("[v0] webhook: no email found for subscription", subscription.id, "- skipping user link")
   }
 
-  const userId = email ? await findOrCreateAuthUser(email) : null
+  const userId = email
+    ? await findOrCreateAuthUser(email, { sendActivationEmail: opts.sendActivationEmail ?? false })
+    : null
   const status = mapSubscriptionStatus(opts.statusOverride ?? subscription.status)
 
   await upsertSubscriptionRecord({
@@ -112,7 +114,9 @@ export async function POST(req: Request) {
 
         const subscription = await retrieveSubscription(subscriptionId)
         if (subscription) {
-          await syncSubscription(subscription, { emailOverride: email })
+          // A completed checkout is the one place we send the activation /
+          // login email (new user -> invite, returning user -> password reset).
+          await syncSubscription(subscription, { emailOverride: email, sendActivationEmail: true })
         } else {
           console.error("[v0] webhook: checkout.session.completed had no subscription", session.id)
         }
