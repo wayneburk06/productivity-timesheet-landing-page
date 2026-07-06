@@ -39,7 +39,26 @@ const keyMode = secretKey.startsWith("sk_live_")
 // Secure, server-side Checkout Session creation.
 // The Stripe secret key never leaves the server.
 export async function POST() {
-  console.log("[v0] Creating checkout session with price id:", PRICE_ID)
+  // --- Per-request diagnostics (visible in Vercel Production logs) ----------
+  // These run on every checkout attempt and are awaited so they are flushed
+  // before the (possibly failing) create call. Safe to log: no secret values.
+  console.log("[v0] checkout: STRIPE_SECRET_KEY set:", secretKey.length > 0)
+  console.log("[v0] checkout: key mode:", keyMode)
+  try {
+    const account = await stripe.accounts.retrieve()
+    console.log("[v0] checkout: authenticated Stripe account id:", account.id)
+    console.log(
+      "[v0] checkout: account matches expected (acct_1TpQ7xLjAVqODdeg):",
+      account.id === "acct_1TpQ7xLjAVqODdeg",
+    )
+  } catch (err) {
+    console.error(
+      "[v0] checkout: stripe.accounts.retrieve() failed:",
+      err instanceof Error ? err.message : err,
+    )
+  }
+  console.log("[v0] checkout: using PRICE_ID:", PRICE_ID)
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
