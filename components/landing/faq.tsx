@@ -35,6 +35,14 @@ const faqs = [
     q: "Which Windows versions are supported?",
     a: `Productivity Timesheet supports ${appConfig.minWindows}. Both 64-bit Windows 10 and Windows 11 are fully supported.`,
   },
+  {
+    q: "How can I cancel my subscription?",
+    a: "Subscription and billing can be managed anytime in the Account area.",
+  },
+  {
+    q: "Where can I find my invoices?",
+    a: 'Invoices are available in the Account area under "Manage subscription".',
+  },
 ]
 
 export function Faq() {

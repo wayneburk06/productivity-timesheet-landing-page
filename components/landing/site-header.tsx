@@ -10,6 +10,7 @@ const navItems = [
   { label: "Screenshots", href: "#screenshots" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
+  { label: "Account", href: "/account" },
 ]
 
 export function SiteHeader() {
