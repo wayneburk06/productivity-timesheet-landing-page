@@ -101,10 +101,18 @@ export async function findOrCreateAuthUser(
     if (sendActivationEmail) {
       const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, { redirectTo })
       if (error) {
-        console.error("[v0] webhook: failed to send password email to existing user", normalizedEmail, "-", error.message)
-      } else {
-        console.log("[v0] webhook: password/login email sent to existing user", normalizedEmail)
-      }
+  console.error("[v0] webhook: failed to send password email to existing user", {
+    email: normalizedEmail,
+    message: error.message,
+    name: error.name,
+    status: error.status,
+    code: error.code,
+    fullError: JSON.stringify(error),
+    redirectTo,
+  })
+} else {
+  console.log("[v0] webhook: password/login email sent to existing user", normalizedEmail)
+}
     } else {
       console.log("[v0] webhook: found existing auth user for", normalizedEmail)
     }
