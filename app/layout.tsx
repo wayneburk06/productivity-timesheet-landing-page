@@ -27,6 +27,8 @@ export const metadata: Metadata = {
     'focus tracking',
   ],
   authors: [{ name: 'Productivity Timesheet' }],
+  // app/icon.png and app/apple-icon.png are picked up automatically by
+  // Next.js App Router — no manual icons config needed.
   openGraph: {
     title: 'Productivity Timesheet — Plan every 15 minutes',
     description:
@@ -38,24 +40,6 @@ export const metadata: Metadata = {
     title: 'Productivity Timesheet — Plan every 15 minutes',
     description:
       'Compare your planned work with what you actually accomplished. A privacy-first Windows productivity app.',
-  },
-  generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
   },
 }
 
