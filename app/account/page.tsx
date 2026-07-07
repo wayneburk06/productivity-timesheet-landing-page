@@ -43,7 +43,7 @@ export default async function AccountPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/")
+    redirect("/login?next=/account")
   }
 
   // Fetch the most recent subscription row for this user.
