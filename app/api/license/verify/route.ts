@@ -147,8 +147,6 @@ export async function POST(request: Request): Promise<Response> {
     return jsonResponse({ valid: false, reason: "server_error" }, 500)
   }
 
-  const isAdmin = subscription?.is_admin === true
-
   // 3) No subscription row at all -> deny (unless admin).
   if (!subscription) {
     console.log("[v0] license: no subscription found for", email)
@@ -156,8 +154,9 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const subscriptionStatus = subscription.subscription_status ?? ""
+  const isAdmin = subscription.is_admin === true
 
-  // 4) Admin flag grants unconditional access.
+  // 4) Admin flag grants unconditional access, regardless of subscription status.
   if (isAdmin) {
     console.log("[v0] license: access granted (admin) for", email)
     return jsonResponse(
