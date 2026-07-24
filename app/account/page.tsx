@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { createClient } from "@/lib/supabase/server"
 import { getSupabaseAdmin } from "@/lib/supabase-admin"
 import { ManageSubscriptionButton } from "@/components/account/manage-subscription-button"
+import { DownloadButton } from "@/components/download-button"
 
 export const metadata: Metadata = {
   title: "Account – Productivity Timesheet",
@@ -102,6 +103,7 @@ export default async function AccountPage() {
 
         {/* Actions */}
         <div className="flex flex-col items-center gap-4">
+          <DownloadButton className="w-full" label="App herunterladen" />
           <ManageSubscriptionButton className="w-full" />
           <Link
             href="/"
