@@ -59,7 +59,7 @@ export function LoginForm({ next }: { next?: string }) {
     setResetLoading(true)
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail.trim().toLowerCase(), {
-      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      redirectTo: `${window.location.origin}/reset-password`,
     })
 
     setResetLoading(false)
