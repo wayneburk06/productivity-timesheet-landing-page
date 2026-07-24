@@ -45,7 +45,7 @@ const faqs = [
   },
   {
     q: "What should I do if the download didn't work or start?",
-    a: "If the download fails or doesn't start, try logging into your account on the website. You'll find a download link in the Account area that you can use to download the app again. If you continue to experience issues, please contact support@productivity-timesheet.de.",
+    a: "If the download fails or doesn't start, try logging into your account on the website. You'll find a download link in the Account area that you can use to download the app again. If you continue to experience issues, please contact support@productivitytimesheet.app.",
   },
 ]
 
