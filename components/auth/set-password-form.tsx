@@ -25,17 +25,20 @@ export function SetPasswordForm({ initialError, mode = "activation" }: SetPasswo
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(initialError ?? null)
 
-  // Establish the activation session before showing the form. Supabase can
-  // deliver the session in two ways depending on the email template:
-  //   - Server flow: token_hash/type or code -> handled by /auth/callback,
-  //     which sets cookies. Here we simply read the resulting user.
-  //   - Implicit flow: tokens arrive in the URL fragment
-  //     (#access_token=...&refresh_token=...). Fragments never reach the
-  //     server, so we must set the session on the client.
+  // Establish the activation/recovery session before showing the form. 
+  // Supabase can deliver the session in two ways depending on the email template:
+  //   - OTP flow (default): token_hash + type -> handled by /auth/callback,
+  //     which verifies the token via verifyOtp(), then sets cookies.
+  //     Here we simply read the resulting user session from cookies.
+  //   - PKCE flow: code -> handled by /auth/callback, which exchanges the code
+  //     for a session via exchangeCodeForSession(), then sets cookies.
+  //   - Implicit flow (rare): tokens in URL hash (#access_token=...&refresh_token=...).
+  //     Fragments never reach the server, so we set the session on the client.
   useEffect(() => {
     let active = true
 
     async function establishSession() {
+      // First, check for implicit flow tokens in the URL fragment (rare, but supported).
       if (typeof window !== "undefined" && window.location.hash) {
         const params = new URLSearchParams(window.location.hash.replace(/^#/, ""))
         const accessToken = params.get("access_token")
@@ -49,20 +52,32 @@ export function SetPasswordForm({ initialError, mode = "activation" }: SetPasswo
           })
           // Strip the tokens from the URL immediately (never leave them around).
           window.history.replaceState(null, "", window.location.pathname)
-          if (sessionError && active) setError(sessionError.message)
+          if (sessionError && active) {
+            console.log("[v0] set-password-form: setSession error:", sessionError.message)
+            setError(sessionError.message)
+          }
         } else if (fragmentError) {
           window.history.replaceState(null, "", window.location.pathname)
-          if (active) setError(fragmentError)
+          if (active) {
+            console.log("[v0] set-password-form: fragment error:", fragmentError)
+            setError(fragmentError)
+          }
         }
       }
 
+      // Now check for a valid session. The /auth/callback route will have already
+      // verified the token_hash or code and set the session in cookies if successful.
       const { data } = await supabase.auth.getUser()
       if (!active) return
+      
       if (data.user) {
+        console.log("[v0] set-password-form: valid session found for:", data.user.email)
         setHasSession(true)
         setEmail(data.user.email ?? null)
         // A valid session supersedes any stale error from the query string.
         setError(null)
+      } else {
+        console.log("[v0] set-password-form: no valid session found")
       }
       setCheckingSession(false)
     }
