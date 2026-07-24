@@ -16,6 +16,10 @@ export function LoginForm({ next }: { next?: string }) {
   const [password, setPassword] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [resetEmail, setResetEmail] = useState("")
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetSuccess, setResetSuccess] = useState(false)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -47,6 +51,89 @@ export function LoginForm({ next }: { next?: string }) {
     // Redirect to the originally requested page, defaulting to /account.
     router.push(next ?? "/account")
     router.refresh()
+  }
+
+  async function handleResetPassword(event: React.FormEvent) {
+    event.preventDefault()
+    setError(null)
+    setResetLoading(true)
+
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail.trim().toLowerCase(), {
+      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+    })
+
+    setResetLoading(false)
+
+    if (resetError) {
+      setError(resetError.message)
+      return
+    }
+
+    setResetSuccess(true)
+    setResetEmail("")
+  }
+
+  if (showForgotPassword) {
+    return (
+      <form onSubmit={handleResetPassword} className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="reset-email" className="text-sm font-medium text-foreground">
+            E-Mail-Adresse
+          </label>
+          <input
+            id="reset-email"
+            type="email"
+            autoComplete="email"
+            required
+            value={resetEmail}
+            onChange={(e) => setResetEmail(e.target.value)}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-base text-foreground outline-none ring-primary/40 focus:ring-2"
+            placeholder="name@example.com"
+          />
+        </div>
+
+        {resetSuccess ? (
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+            <p className="text-sm font-medium text-green-800">
+              ✓ Passwort-Reset-Link wurde gesendet
+            </p>
+            <p className="mt-2 text-sm text-green-700">
+              Bitte überprüfe Dein E-Mail-Postfach auf den Reset-Link.
+            </p>
+          </div>
+        ) : null}
+
+        {error ? (
+          <p role="alert" className="text-pretty text-sm leading-relaxed text-destructive">
+            {error}
+          </p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={resetLoading || !resetEmail || resetSuccess}
+          className={cn(ctaBaseClasses, ctaPrimaryClasses, "w-full disabled:opacity-70")}
+        >
+          {resetLoading ? (
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+          ) : null}
+          {resetLoading ? "Wird gesendet…" : "Reset-Link senden"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowForgotPassword(false)
+            setResetEmail("")
+            setResetSuccess(false)
+            setError(null)
+          }}
+          className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+        >
+          Zurück zu Anmeldung
+        </button>
+      </form>
+    )
   }
 
   return (
@@ -100,6 +187,14 @@ export function LoginForm({ next }: { next?: string }) {
           <LogIn className="size-4" aria-hidden="true" />
         )}
         {submitting ? "Wird angemeldet…" : "Anmelden"}
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setShowForgotPassword(true)}
+        className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+      >
+        Passwort vergessen?
       </button>
     </form>
   )

@@ -8,7 +8,12 @@ import { createClient } from "@/lib/supabase/client"
 import { ctaBaseClasses, ctaPrimaryClasses } from "@/components/download-button"
 import { cn } from "@/lib/utils"
 
-export function SetPasswordForm({ initialError }: { initialError?: string }) {
+interface SetPasswordFormProps {
+  initialError?: string
+  mode?: "activation" | "reset"
+}
+
+export function SetPasswordForm({ initialError, mode = "activation" }: SetPasswordFormProps) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -90,17 +95,25 @@ export function SetPasswordForm({ initialError }: { initialError?: string }) {
       return
     }
 
-    // Sign out so the activation session isn't left lingering in the browser,
-    // then send the user to the confirmation page.
+    // Sign out so the session isn't left lingering in the browser,
+    // then send the user to the confirmation page or login.
     await supabase.auth.signOut()
-    router.push("/account-activated")
+    if (mode === "reset") {
+      router.push("/login?reset=success")
+    } else {
+      router.push("/account-activated")
+    }
   }
 
   if (checkingSession) {
     return (
       <div className="flex items-center justify-center gap-2 py-8 text-muted-foreground">
         <Loader2 className="size-5 animate-spin" aria-hidden="true" />
-        <span>Verifying your activation link…</span>
+        <span>
+          {mode === "reset"
+            ? "Verifying your reset link…"
+            : "Verifying your activation link…"}
+        </span>
       </div>
     )
   }
@@ -109,7 +122,10 @@ export function SetPasswordForm({ initialError }: { initialError?: string }) {
     return (
       <div className="text-center">
         <p className="text-pretty text-base leading-relaxed text-foreground">
-          {error ?? "This activation link is invalid or has expired."}
+          {error ??
+            (mode === "reset"
+              ? "This reset link is invalid or has expired."
+              : "This activation link is invalid or has expired.")}
         </p>
         <p className="mt-4 text-pretty text-sm leading-relaxed text-muted-foreground">
           Please use the most recent email we sent you, or contact support if the problem persists.
@@ -128,7 +144,7 @@ export function SetPasswordForm({ initialError }: { initialError?: string }) {
 
       <div className="flex flex-col gap-2 text-left">
         <label htmlFor="password" className="text-sm font-medium text-foreground">
-          New password
+          {mode === "reset" ? "New password" : "New password"}
         </label>
         <input
           id="password"
@@ -174,7 +190,13 @@ export function SetPasswordForm({ initialError }: { initialError?: string }) {
         ) : (
           <KeyRound className="size-4" aria-hidden="true" />
         )}
-        {submitting ? "Setting password…" : "Set password"}
+        {submitting
+          ? mode === "reset"
+            ? "Resetting password…"
+            : "Setting password…"
+          : mode === "reset"
+            ? "Reset password"
+            : "Set password"}
       </button>
     </form>
   )
